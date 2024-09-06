@@ -22,6 +22,8 @@ import shutil
 from osgeo import gdal
 import math
 import numpy as np
+import os
+from django.conf import settings
 
 BASE_FOLDER_COUNT = 30
 

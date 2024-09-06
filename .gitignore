@@ -22,7 +22,7 @@ logs/
 project/project/
 project/target/
 target/
-__pycache__/
+**/__pycache__/
 .idea/
 
 # large/data files
@@ -33,9 +33,10 @@ __pycache__/
 dynamicFiles/
 static_root/
 layerData/
-data_files/
+**/data_files/
 node_modules/
 Watersheds/
+smartscape/
 
 settings_local.py
 local_settings.py
