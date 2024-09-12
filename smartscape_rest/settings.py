@@ -25,10 +25,11 @@ SECRET_KEY = '(6d+9%!ealr@i!x2b+0tfffn51$()91v6$uh628)u3ug6%@vfc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# TODO these will need to be configured properly before being put into production
+ALLOWED_HOSTS = ["3.137.122.184"] # elastic ip from aws
+CORS_ALLOW_ALL_ORIGINS = True
 
 GEOSERVER_URL = "http://144.92.32.223:8080"
-CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
    'GET',

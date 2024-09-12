@@ -1,3 +1,10 @@
+"""
+Main file for controlling SmartScape views
+Author: Matthew Bayles
+Created: November 2021
+Python Version: 3.9.2
+"""
+import uuid
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
