@@ -35,14 +35,12 @@ from django.views.decorators.csrf import csrf_exempt
 
 @api_view(['POST', 'GET'])  # Adjust HTTP methods as needed
 def api(request):
-    processed_data = {
-    "var1": "tet",
-    "var2": "var2",
-    # "result": f"Processed {"var1"} and {"var2"}"
-    }
-
     # Return the processed data as JSON
-    return Response(processed_data, status=status.HTTP_200_OK)
+    response = JsonResponse({'message': 'CORS is working!'})
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    return response
 
 
 

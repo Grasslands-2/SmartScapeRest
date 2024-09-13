@@ -28,10 +28,11 @@ DEBUG = True
 # TODO these will need to be configured properly before being put into production
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.137.122.184' ] # elastic ip from aws
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-    'http://3.137.122.184',
-]
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8000',
+#     'http://3.137.122.184',
+# ]
 
 GEOSERVER_URL = "http://144.92.32.223:8080"
 
