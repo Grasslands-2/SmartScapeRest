@@ -52,6 +52,7 @@ CORS_ALLOW_HEADERS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,7 +61,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'ss_rest',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
