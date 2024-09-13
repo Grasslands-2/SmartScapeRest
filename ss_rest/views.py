@@ -30,6 +30,7 @@ import numpy as np
 from osgeo import gdalconst as gc
 import os
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 
 @api_view(['POST', 'GET'])  # Adjust HTTP methods as needed
@@ -125,6 +126,7 @@ def download(link, filelocation):
             if chunk:
                 f.write(chunk)
 
+@csrf_exempt
 @api_view(['POST', 'GET'])
 def get_selection_raster(request):
     """
@@ -140,6 +142,7 @@ def get_selection_raster(request):
         Contains output parameters needed for client
 
     """
+    print(request)
     data = {}
     field_coors_formatted = []
     error = ""
