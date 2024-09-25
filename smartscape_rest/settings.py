@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from socket import gethostbyname
+from socket import gethostname
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +30,8 @@ DEBUG = True
 
 # TODO these will need to be configured properly before being put into production
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'smartscape-loadbalancer-385558552.us-east-2.elb.amazonaws.com', "smartscape-api.com", "www.smartscape-api.com" ] # elastic ip from aws
+ALLOWED_HOSTS.append(gethostbyname(gethostname()))
+print("allowed hosts", ALLOWED_HOSTS)
 CORS_ALLOW_ALL_ORIGINS = True
 
 # CORS_ALLOWED_ORIGINS = [
