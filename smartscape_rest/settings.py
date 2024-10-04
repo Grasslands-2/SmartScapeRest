@@ -29,14 +29,14 @@ SECRET_KEY = '(6d+9%!ealr@i!x2b+0tfffn51$()91v6$uh628)u3ug6%@vfc'
 DEBUG = True
 
 # TODO these will need to be configured properly before being put into production
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'smartscape-loadbalancer-385558552.us-east-2.elb.amazonaws.com', "smartscape-api.com", "www.smartscape-api.com" ] # elastic ip from aws
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'http://api.smartscape.grasslandag.org','http://ss-loadbalancer-private-1065978722.us-east-2.elb.amazonaws.com/'  ] 
+# allow health checks from target group
 ALLOWED_HOSTS.append(gethostbyname(gethostname()))
-print("allowed hosts", ALLOWED_HOSTS)
 CORS_ALLOW_ALL_ORIGINS = True
 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:8000',
-#     'http://3.137.122.184',
+#     'http://3.137.58.213',
 # ]
 
 GEOSERVER_URL = "http://144.92.32.223:8080"
