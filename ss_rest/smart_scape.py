@@ -51,19 +51,19 @@ class SmartScape:
             The folder where previously downloaded input rasters reside
         """
         self.file_name = file_name
-        self.raster_image_file_path = os.path.join(settings.BASE_DIR,
+        self.raster_image_file_path = os.path.join(settings.SCRATCH_DIR,
                                                    'smartscape', 'data_files',
                                                    'raster_inputs',
                                                    self.file_name, "selection.png")
         self.bounds = {"x": 0, "y": 0}
         self.raster_inputs = {}
         self.no_data = -9999
-        self.data_dir = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files', 'raster_inputs')
-        self.in_dir = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files',
+        self.data_dir = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files', 'raster_inputs')
+        self.in_dir = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                                    'raster_inputs', self.file_name)
         if not os.path.exists(self.in_dir):
             os.makedirs(self.in_dir)
-        self.geo_folder = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files',
+        self.geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                                        'raster_inputs', geo_folder)
         self.request_json = request_json
         self.threads = []
