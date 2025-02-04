@@ -25,8 +25,6 @@ import numpy as np
 import os
 from django.conf import settings
 
-BASE_FOLDER_COUNT = 30
-
 
 def download_base_rasters_helper(request, geo_folder):
     print("starting to download base rasters")
@@ -34,7 +32,7 @@ def download_base_rasters_helper(request, geo_folder):
     # geo_folder = request_json["folderId"]
     region = request_json['region']
     manure_options = get_phos_fert_options(request, True, region)
-    print("manure options", manure_options)
+    # print("manure options", manure_options)
     base_scen = request_json['baseTrans']
     geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                               'raster_inputs', geo_folder)
@@ -267,7 +265,7 @@ def download_base_rasters_helper(request, geo_folder):
         os.makedirs(folder_base)
 
     for layer in base_layer_dic:
-        print("downloading layer base", base_layer_dic[layer])
+        # print("downloading layer base", base_layer_dic[layer])
         url = geoserver_url + workspace + base_layer_dic[layer] + extents_string_x + extents_string_y
         raster_file_path = os.path.join(geo_folder, "base", layer + ".tif")
         download_thread = threading.Thread(target=download, args=(url, raster_file_path))
@@ -275,12 +273,15 @@ def download_base_rasters_helper(request, geo_folder):
 
 
 def download(link, filelocation):
+    # adding part so we can check for partial downloads
+    temp_name = filelocation + ".part"
     r = requests.get(link, stream=True)
-    with open(filelocation, 'wb') as f:
+    with open(temp_name, 'wb') as f:
         for chunk in r.iter_content(1024):
             if chunk:
                 f.write(chunk)
-
+    # rename once file is fully downloaded
+    os.rename(temp_name, filelocation)
 
 def get_phos_fert_options(request, base_calc, region):
     """
@@ -544,11 +545,13 @@ def check_base_files_loaded(geo_folder, region):
         if not os.path.exists(geo_folder_func):
             return False
         dir_list = os.listdir(geo_folder_func)
-        for file in dir_list:
-            folder_count = folder_count + 1
-        print("Number of base files loaded", folder_count)
-        if folder_count != BASE_FOLDER_COUNT:
+        if len(dir_list) < 30:
             return False
+        for file in dir_list:
+            print(file)
+            folder_count = folder_count + 1
+            if file.endswith(".part"):
+                return False
         return True
 
     files_loaded = check_file_path(geo_folder)

@@ -334,6 +334,7 @@ class SmartScape:
         self.threads.append(download_thread)
 
     def joinThreads(self):
+        # ensure program will wait until all threads done before continuing
         for thread in self.threads:
             thread.join()
 
