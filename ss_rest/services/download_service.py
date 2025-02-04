@@ -23,6 +23,8 @@ from osgeo import gdal
 import math
 import numpy as np
 import os
+from django.conf import settings
+
 
 BASE_FOLDER_COUNT = 30
 
@@ -34,7 +36,7 @@ def download_base_rasters_helper(request, geo_folder):
     manure_options = get_phos_fert_options(request, True, region)
     print("manure options", manure_options)
     base_scen = request_json['baseTrans']
-    geo_folder = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files',
+    geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                               'raster_inputs', geo_folder)
     base_layer_dic = {}
     # download layers for base case
@@ -305,7 +307,7 @@ def get_phos_fert_options(request, base_calc, region):
 
     base = request_json['baseTrans']
     # file path of our input data
-    geo_folder = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files', 'raster_inputs', folder_id)
+    geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files', 'raster_inputs', folder_id)
 
     # make sure files are loaded
     def check_file_path(geo_folder_func):

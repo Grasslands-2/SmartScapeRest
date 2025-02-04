@@ -11,10 +11,15 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from socket import gethostbyname
+from socket import gethostname
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+print(BASE_DIR)
+SCRATCH_DIR = os.path.join("/", "mnt", "efs")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,19 +31,36 @@ SECRET_KEY = '(6d+9%!ealr@i!x2b+0tfffn51$()91v6$uh628)u3ug6%@vfc'
 DEBUG = True
 
 # TODO these will need to be configured properly before being put into production
-ALLOWED_HOSTS = ["3.137.122.184"] # elastic ip from aws
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'api.smartscape.grasslandag.org','ss-loadbalancer-private-1065978722.us-east-2.elb.amazonaws.com'] 
+# allow health checks from target group
+ALLOWED_HOSTS.append(gethostbyname(gethostname()))
 CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8000',
+#     'http://3.137.58.213',
+# ]
 
 GEOSERVER_URL = "http://144.92.32.223:8080"
 
 CORS_ALLOW_METHODS = [
-   'GET',
-   'POST',
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +69,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'ss_rest',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [

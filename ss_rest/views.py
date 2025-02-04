@@ -30,86 +30,22 @@ import numpy as np
 from osgeo import gdalconst as gc
 import os
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 
 @api_view(['POST', 'GET'])  # Adjust HTTP methods as needed
 def api(request):
-    processed_data = {
-    "var1": "tet",
-    "var2": "var2",
-    # "result": f"Processed {"var1"} and {"var2"}"
-    }
-
     # Return the processed data as JSON
-    return Response(processed_data, status=status.HTTP_200_OK)
+    response = JsonResponse({'message': 'CORS is working!'})
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    return response
 
 
 
 def offline(request):
     return render(request, 'offline.html')
-
-
-# def index(request):
-#     """
-#     Render the base template for SmartScape
-#     Parameters
-#     ----------
-#     request : request object
-#             The request object from the client
-
-#     Returns
-#     -------
-#     HTTP Response
-#         Return the page render
-#     """
-#     # if request.user.is_athenticated:
-#     user_name = request.user.username
-#     context = {
-#         "user_info": {"user_name": user_name}
-#     }
-#     dir_path = os.path.join(settings.BASE_DIR, 'smartscape',
-#                             'data_files', 'raster_inputs')
-#     if not os.path.exists(dir_path):
-#         os.makedirs(dir_path)
-#     # download the watersheds for the learning hubs
-#     file_names = [
-#         "cloverBeltWI_Huc12",
-#         "southWestWI_Huc12",
-#         "uplandsWI_Huc12",
-#         "northeastWI_Huc12",
-#         "redCedarWI_Huc12",
-#         "pineRiverMN_Huc12",
-#         "cloverBeltWI_HUC08",
-#         "southWestWI_HUC08",
-#         "uplandsWI_HUC08",
-#         "northeastWI_HUC08",
-#         "redCedarWI_HUC08",
-#         "pineRiverMN_HUC08",
-#     ]
-#     threads = []
-#     for name in file_names:
-#         url = settings.GEOSERVER_URL + "/geoserver/SmartScapeVector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=SmartScapeVector%3A" + name + "&outputFormat=application%2Fjson"
-#         print("downloading", url)
-#         raster_file_path = os.path.join(dir_path, name + ".geojson")
-#         thread = createNewDownloadThread(url, raster_file_path)
-#         threads.append(thread)
-#         # r = requests.get(url)
-#         # with open(raster_file_path, "wb") as f:
-#         #     f.write(r.content)
-#     for th in threads:
-#         th.join()
-#     input_path = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files',
-#                               'raster_inputs')
-#     now = time.time()
-#     for f in os.listdir(input_path):
-#         try:
-#             f = os.path.join(input_path, f)
-#             if os.stat(f).st_mtime < now - 3600:
-#                 shutil.rmtree(f)
-#         except OSError as e:
-#             print("Error: %s : %s" % (f, e.strerror))
-
-#     return render(request, 'smartscape_home.html', context=context)
 
 
 def createNewDownloadThread(link, filelocation):
@@ -125,7 +61,8 @@ def download(link, filelocation):
             if chunk:
                 f.write(chunk)
 
-@api_view(['POST', 'GET'])
+@csrf_exempt
+@api_view(['POST', 'GET', 'OPTIONS'])
 def get_selection_raster(request):
     """
     Download input rasters in background
@@ -140,6 +77,7 @@ def get_selection_raster(request):
         Contains output parameters needed for client
 
     """
+    print(request)
     data = {}
     field_coors_formatted = []
     error = ""
@@ -322,7 +260,7 @@ def get_transformed_land(request):
     trans_id = str(uuid.uuid4())
     folder_id = request_json["folderId"]
 
-    geo_folder = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files',
+    geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                               'raster_inputs', folder_id, "base")
 
     ss_rest.helper_base.check_base_files_loaded(geo_folder, request_json['region'])
@@ -350,7 +288,7 @@ def get_image(response):
         The image object
     """
     file_name = response.GET.get('file_name')
-    file_path = os.path.join(settings.BASE_DIR, 'smartscape', 'data_files',
+    file_path = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                              'raster_inputs', file_name)
     print(file_path)
     img = open(file_path, 'rb')

@@ -50,7 +50,7 @@ class RasterDataSmartScape:
         """
         self.file_name = field_id
 
-        self.dir_path = os.path.join(settings.BASE_DIR, 'smartscape',
+        self.dir_path = os.path.join(settings.SCRATCH_DIR, 'smartscape',
                                      'data_files', 'raster_inputs',
                                      self.file_name)
 
