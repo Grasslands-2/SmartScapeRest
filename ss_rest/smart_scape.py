@@ -420,6 +420,7 @@ class SmartScape:
         # calculate the p value for our input rasters
 
         self.download_rasters(geoTransform, image, layer_dic)
+        print("all transformation files downloaded")
         # count cells for area that has been selected for the whole aoi
         # this only counts cells from the heierarchy
         # the total area of the selected transformations

@@ -1466,40 +1466,40 @@ class APIUser(HttpUser):
             "slope2": 700,
             "streamDist1": 0,
             "streamDist2": 16000,
-            "useFt": 'true',
+            "useFt": 'True',
             "extent": [],
             "field_coors": [],
             "adoptionRate": 100,
             "landCover": {
-                "contCorn": "false",
-                "cashGrain": "false",
-                "dairy": "false",
-                "potato": "false",
-                "cranberry": "false",
-                "hay": "false",
-                "pasture": "false",
-                "grasslandIdle": "false"
+                "contCorn": "False",
+                "cashGrain": "False",
+                "dairy": "False",
+                "potato": "False",
+                "cranberry": "False",
+                "hay": "False",
+                "pasture": "False",
+                "grasslandIdle": "False"
             },
             "landClass": {
-                "land1": "false",
-                "land2": "false",
-                "land3": "false",
-                "land4": "false",
-                "land5": "false",
-                "land6": "false",
-                "land7": "false",
-                "land8": "false",
-                "landErosion": "false",
-                "landRoot": "false",
-                "landWater": "false"
+                "land1": "False",
+                "land2": "False",
+                "land3": "False",
+                "land4": "False",
+                "land5": "False",
+                "land6": "False",
+                "land7": "False",
+                "land8": "False",
+                "landErosion": "False",
+                "landRoot": "False",
+                "landWater": "False"
             },
             "farmClass": {
-                "prime": "false",
-                "stateFarm": "false",
-                "notPrime": "false",
-                "prime1": "false",
-                "prime2": "false",
-                "prime3": "false"
+                "prime": "False",
+                "stateFarm": "False",
+                "notPrime": "False",
+                "prime1": "False",
+                "prime2": "False",
+                "prime3": "False"
             }
         },
         "management": {
@@ -1514,7 +1514,7 @@ class APIUser(HttpUser):
             "phos_manure": "default",
             "phos_fertilizer": "default",
             "phos_fert_options": [],
-            "legume": "false",
+            "legume": "False",
             "density": "default",
             "grassYield": "default",
             "rotFreq": "default"
@@ -1602,7 +1602,7 @@ class APIUser(HttpUser):
             "phos_manure": "default",
             "phos_fertilizer": "default",
             "phos_fert_options": [],
-            "legume": "false",
+            "legume": "False",
             "density": "cn_hi",
             "grassYield": "medium",
             "rotFreq": "1"
@@ -1610,7 +1610,7 @@ class APIUser(HttpUser):
     },
     "folderId": "bdc7c13e-7373-4b9c-bb45-cb64a5ca816f"
 }
-        get_transformed_land = {"trans":{"1":{"name":" ","id":"ef8cae92-8119-4baf-9c47-12610341d55e","rank":1,"areaSelected":1667,"areaSelectedPerWorkArea":20,"area":33856676,"displayLayerID":"641","boundaryLayerID":"643","displayOpacity":50,"selection":{"slope1":0,"slope2":700,"streamDist1":0,"streamDist2":16000,"useFt":"true","extent":[-10125353.71577826,5351997.471920447,-10112607.634082431,5360760.7414509095],"field_coors":[],"adoptionRate":100,"landCover":{"contCorn":"true","cashGrain":"true","dairy":"true","potato":"false","cranberry":"false","hay":"false","pasture":"false","grasslandIdle":"false"},"landClass":{"land1":"false","land2":"false","land3":"false","land4":"false","land5":"false","land6":"false","land7":"false","land8":"false","landErosion":"false","landRoot":"false","landWater":"false"},"farmClass":{"prime":"false","stateFarm":"false","notPrime":"false","prime1":"false","prime2":"false","prime3":"false"}},"management":{"rotationType":"pasture","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"0","phos_manure":0,"phos_fertilizer":0,"phos_fert_options":[0,50,100],"legume":"true","density":"rt_rt","grassYield":"medium","rotFreq":"1"},"econ":{"p2o5":1,"nFert":1,"cornSeed":80.5,"cornPest":56.64,"cornMach":123,"soySeed":54,"soyPest":40,"soyMach":62,"alfaSeed":60,"alfaPest":32,"alfaMach":136.5,"alfaFirstYear":225.5,"oatSeed":30,"oatPest":20,"oatMach":63.5,"pastSeed":28.44,"pastPest":5,"pastMach":19.7}}},"base":{"name":"base","id":-1,"rank":99,"areaSelected":0,"areaSelectedPerWorkArea":0,"area":0,"displayLayerID":-99,"boundaryLayerID":-99,"displayOpacity":50,"selection":{"slope1":0,"slope2":700,"streamDist1":0,"streamDist2":16000,"useFt":"true","extent":[],"field_coors":[],"adoptionRate":100,"landCover":{"contCorn":"false","cashGrain":"false","dairy":"false","potato":"false","cranberry":"false","hay":"false","pasture":"false","grasslandIdle":"false"},"landClass":{"land1":"false","land2":"false","land3":"false","land4":"false","land5":"false","land6":"false","land7":"false","land8":"false","landErosion":"false","landRoot":"false","landWater":"false"},"farmClass":{"prime":"false","stateFarm":"false","notPrime":"false","prime1":"false","prime2":"false","prime3":"false"}},"management":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"0_100","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"0","phos_manure":"default","phos_fertilizer":"default","phos_fert_options":[],"legume":"false","density":"default","grassYield":"default","rotFreq":"default"},"econ":{"p2o5":1,"nFert":1,"cornSeed":80.5,"cornPest":56.64,"cornMach":123,"soySeed":54,"soyPest":40,"soyMach":62,"alfaSeed":60,"alfaPest":32,"alfaMach":136.5,"alfaFirstYear":225.5,"oatSeed":30,"oatPest":20,"oatMach":63.5,"pastSeed":28.44,"pastPest":5,"pastMach":19.7},"managementCont":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"125","phos_manure":"0","phos_fertilizer":"100","phos_fert_options":[],"legume":"default","density":"default","grassYield":"default","rotFreq":"default"},"managementCorn":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"125","phos_manure":"0","phos_fertilizer":"100","phos_fert_options":[],"legume":"default","density":"default","grassYield":"default","rotFreq":"default"},"managementDairy":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"100","nitrogen_fertilizer":"25","phos_manure":"254","phos_fertilizer":0,"phos_fert_options":[],"legume":"default","density":"default","grassYield":"default","rotFreq":"default"},"managementPast":{"rotationType":"default","cover":"default","tillage":"default","contour":"default","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"50","phos_manure":"0","phos_fertilizer":0,"phos_fert_options":[],"legume":"false","density":"cn_hi","grassYield":"medium","rotFreq":"1"}},"folderId":"9a4d3851-f17f-4d1a-91a5-612ccb1f45e2","region":"southWestWI","aoiArea":33856676,"aoiExtents":[-10125353.71577826,5351997.471920447,-10112607.634082431,5360760.7414509095],"baseLoaded":"true"}
+        get_transformed_land = {"trans":{"1":{"name":" ","id":"07c927ef-bdf5-47e2-a48a-30c156f887ba","rank":1,"areaSelected":1051,"areaSelectedPerWorkArea":13,"area":33856676,"displayLayerID":"591","boundaryLayerID":"593","displayOpacity":50,"selection":{"slope1":0,"slope2":700,"streamDist1":0,"streamDist2":16000,"useFt":True,"extent":[-10125353.71577826,5351997.471920447,-10112607.634082431,5360760.7414509095],"field_coors":[],"adoptionRate":100,"landCover":{"contCorn":False,"cashGrain":False,"dairy":True,"potato":False,"cranberry":False,"hay":False,"pasture":False,"grasslandIdle":False},"landClass":{"land1":False,"land2":False,"land3":False,"land4":False,"land5":False,"land6":False,"land7":False,"land8":False,"landErosion":False,"landRoot":False,"landWater":False},"farmClass":{"prime":False,"stateFarm":False,"notPrime":False,"prime1":False,"prime2":False,"prime3":False}},"management":{"rotationType":"pasture","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"0","phos_manure":0,"phos_fertilizer":0,"phos_fert_options":[0,50,100],"legume":"True","density":"rt_rt","grassYield":"medium","rotFreq":"1"},"econ":{"p2o5":1,"nFert":1,"cornSeed":80.5,"cornPest":56.64,"cornMach":123,"soySeed":54,"soyPest":40,"soyMach":62,"alfaSeed":60,"alfaPest":32,"alfaMach":136.5,"alfaFirstYear":225.5,"oatSeed":30,"oatPest":20,"oatMach":63.5,"pastSeed":28.44,"pastPest":5,"pastMach":19.7}}},"base":{"name":"base","id":-1,"rank":99,"areaSelected":0,"areaSelectedPerWorkArea":0,"area":0,"displayLayerID":-99,"boundaryLayerID":-99,"displayOpacity":50,"selection":{"slope1":0,"slope2":700,"streamDist1":0,"streamDist2":16000,"useFt":True,"extent":[],"field_coors":[],"adoptionRate":100,"landCover":{"contCorn":False,"cashGrain":False,"dairy":False,"potato":False,"cranberry":False,"hay":False,"pasture":False,"grasslandIdle":False},"landClass":{"land1":False,"land2":False,"land3":False,"land4":False,"land5":False,"land6":False,"land7":False,"land8":False,"landErosion":False,"landRoot":False,"landWater":False},"farmClass":{"prime":False,"stateFarm":False,"notPrime":False,"prime1":False,"prime2":False,"prime3":False}},"management":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"0_100","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"0","phos_manure":"default","phos_fertilizer":"default","phos_fert_options":[],"legume":"False","density":"default","grassYield":"default","rotFreq":"default"},"econ":{"p2o5":1,"nFert":1,"cornSeed":80.5,"cornPest":56.64,"cornMach":123,"soySeed":54,"soyPest":40,"soyMach":62,"alfaSeed":60,"alfaPest":32,"alfaMach":136.5,"alfaFirstYear":225.5,"oatSeed":30,"oatPest":20,"oatMach":63.5,"pastSeed":28.44,"pastPest":5,"pastMach":19.7},"managementCont":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"125","phos_manure":"0","phos_fertilizer":"100","phos_fert_options":[],"legume":"default","density":"default","grassYield":"default","rotFreq":"default"},"managementCorn":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"125","phos_manure":"0","phos_fertilizer":"100","phos_fert_options":[],"legume":"default","density":"default","grassYield":"default","rotFreq":"default"},"managementDairy":{"rotationType":"default","cover":"nc","tillage":"su","contour":"1","fertilizer":"default","p_manure_cat":"default","nitrogen":"100","nitrogen_fertilizer":"25","phos_manure":"254","phos_fertilizer":0,"phos_fert_options":[],"legume":"default","density":"default","grassYield":"default","rotFreq":"default"},"managementPast":{"rotationType":"default","cover":"default","tillage":"default","contour":"default","fertilizer":"default","p_manure_cat":"default","nitrogen":"0","nitrogen_fertilizer":"50","phos_manure":"0","phos_fertilizer":0,"phos_fert_options":[],"legume":"False","density":"cn_hi","grassYield":"medium","rotFreq":"1"}},"folderId":"fadf81a2-f9a6-433b-84c4-011f4f075236","region":"southWestWI","aoiArea":33856676,"aoiExtents":[-10125353.71577826,5351997.471920447,-10112607.634082431,5360760.7414509095],"baseLoaded":True}
         headers = {
             'Content-Type': 'application/json',
         }
@@ -1619,10 +1619,10 @@ class APIUser(HttpUser):
         # locust -f .\locust_test.py --host=http://127.0.0.1:8080/
 
         #testing local api
-        self.client.post("http://127.0.0.1:8080/api/get_selection_raster", json=get_selection_raster, headers=headers, verify=False,)
+        # self.client.post("http://127.0.0.1:8080/api/get_selection_raster", json=get_selection_raster, headers=headers, verify=False,)
         # self.client.post("http://127.0.0.1:8080/api/get_transformed_land", json=get_transformed_land, headers=headers, verify=False,)
 
 
         #testing production api
         # self.client.post("https://api.smartscape.grasslandag.org/api/get_selection_raster", json=get_selection_raster, headers=headers, verify=False,)
-        # self.client.post("https://api.smartscape.grasslandag.org/api/get_transformed_land", json=get_transformed_land, headers=headers, verify=False,)
+        self.client.post("https://api.smartscape.grasslandag.org/api/get_transformed_land", json=get_transformed_land, headers=headers, verify=False,)
