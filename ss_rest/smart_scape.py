@@ -2522,8 +2522,13 @@ class SmartScape:
             grazed_manureN = float(nrec_trans["grazedManureN"])
             denitLoss = float(n_parameters["nirate_inputs"]["denitLoss"])
             # denitLoss = 12
+            print("debug")
+            print(self.region)
+            
             precip_dict = {"southWestWI": 43, "cloverBeltWI": 38, "northeastWI": 35, "uplandsWI": 44, "redCedarWI": 39,
                            "pineRiverMN": 39, "eastCentralWI":35, "southEastWI": 35}
+            print(precip_dict)
+            print("#####")
             precip = precip_dict[self.region]
             precN = 0.5 * precip * 0.226
             dryN = precN
