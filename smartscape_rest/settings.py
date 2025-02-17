@@ -19,8 +19,9 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
-SCRATCH_DIR = os.path.join("/", "mnt", "efs")
-# SCRATCH_DIR = r"B:\Work\Grasslands\ss_rest_temp"
+# SCRATCH_DIR = os.path.join("/", "mnt", "efs")
+SCRATCH_DIR = r"B:\Work\Grasslands\ss_rest_temp"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -31,7 +32,7 @@ SECRET_KEY = '(6d+9%!ealr@i!x2b+0tfffn51$()91v6$uh628)u3ug6%@vfc'
 DEBUG = True
 
 # TODO these will need to be configured properly before being put into production
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'api.smartscape.grasslandag.org','ss-loadbalancer-private-1065978722.us-east-2.elb.amazonaws.com'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'api.smartscape.grasslandag.org','ss-loadbalancer-private-1065978722.us-east-2.elb.amazonaws.com', '144.92.32.223'] 
 # allow health checks from target group
 ALLOWED_HOSTS.append(gethostbyname(gethostname()))
 CORS_ALLOW_ALL_ORIGINS = True
