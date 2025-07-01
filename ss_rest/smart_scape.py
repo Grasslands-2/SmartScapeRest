@@ -1019,6 +1019,8 @@ class SmartScape:
         landuse_arr_sel = np.where(
             np.logical_or(base_data["ploss"] == self.no_data, base_data["ploss"] < 0),
             0, base_data["ploss"])
+        #export here
+        
         sum_base = np.sum(landuse_arr_sel)
         sum_base_pl_water = np.sum(landuse_arr_sel * p_del_array)
 
@@ -1111,7 +1113,7 @@ class SmartScape:
                     0, base_data_watershed[model])
         area_selected = area_selected_total * mm_to_ac
         area_watershed = aoi_area_total * mm_to_ac
-
+        self.create_tif(base_data_watershed["ploss"],cont_pl_image, "testing ploss export2")
         # combine everything together
         sum_model_yield = 0
         sum_model_ero = 0
