@@ -42,8 +42,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     'http://3.137.58.213',
 # ]
 
-# GEOSERVER_URL = "http://144.92.32.223:8080"
-GEOSERVER_URL = "http://internal-grassland-geoserver-loadbalancer-855160393.us-east-2.elb.amazonaws.com"
+GEOSERVER_URL = "http://144.92.32.223:8080"
+# GEOSERVER_URL = "http://internal-grassland-geoserver-loadbalancer-855160393.us-east-2.elb.amazonaws.com"
 
 CORS_ALLOW_METHODS = [
     "DELETE",
