@@ -31,7 +31,22 @@ from osgeo import gdalconst as gc
 import os
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+import logging
 
+# Configure root logger
+logging.basicConfig(
+    level=logging.INFO,  # could be DEBUG, WARNING, ERROR, CRITICAL
+    format="%(asctime)s [%(levelname)s] %(filename)s:%(lineno)d - %(message)s",
+    handlers=[
+        # logging.FileHandler("app.log"),  # log to file
+        logging.StreamHandler()          # log to console
+    ]
+)
+
+# logging.getLogger("ss_rest").setLevel(logging.DEBUG)
+
+logger = logging.getLogger(__name__)
+logger.info("Application started")
 
 @api_view(['POST', 'GET'])  # Adjust HTTP methods as needed
 def api(request):
@@ -81,8 +96,6 @@ def get_selection_raster(request):
     data = {}
     field_coors_formatted = []
     error = ""
-    start = time.time()
-    print("downloading rasters in background")
     request_json = js.loads(request.body)
     folder_id = request_json["folderId"]
     extents = request_json["geometry"]["extent"]
@@ -90,22 +103,17 @@ def get_selection_raster(request):
     region = request_json["region"]
     for val in field_coors:
         field_coors_formatted.append(val[0][0])
-    print("downloading base raster")
 
     try:
         geo_data = RasterDataSmartScape(
             extents, field_coors_formatted,
             folder_id,
             region)
-        print("loading layers")
         geo_data.load_layers()
-        print("create clip #######################################")
         geo_data.create_clip()
-        print("Clip raster ", time.time() - start)
 
         geo_data.clip_rasters(True)
-        print("Downloading ", time.time() - start)
-        print("Layer loaded ", time.time() - start)
+
         data = {
             "get_data": "success",
             "folder_id": folder_id
@@ -252,9 +260,7 @@ def get_transformed_land(request):
     JsonResponse
         Contains output parameters needed for client
     """
-    print("running models")
-    # print(request.POST)
-    # print(request.body)
+
     request_json = js.loads(request.body)
     # create a new folder for the model outputs
     trans_id = str(uuid.uuid4())
@@ -267,8 +273,6 @@ def get_transformed_land(request):
 
     model = SmartScape(request_json, trans_id, folder_id)
     return_data = model.run_models()
-    # return_data = []
-    print("done running models")
 
     return JsonResponse(return_data, safe=False)
 

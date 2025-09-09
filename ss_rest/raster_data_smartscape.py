@@ -23,7 +23,11 @@ import math
 import threading
 import shutil
 import traceback
+from ss_rest.services import geoserver_cache_checker
+import logging
+from typing import List, Dict
 
+logger = logging.getLogger(__name__)
 
 class RasterDataSmartScape:
     """
@@ -49,26 +53,26 @@ class RasterDataSmartScape:
             The id of the folder to store the rasters
         """
         self.file_name = field_id
+        self.region = region
 
         self.dir_path = os.path.join(settings.SCRATCH_DIR, 'smartscape',
                                      'data_files', 'raster_inputs',
                                      self.file_name)
 
         self.layer_dic = {
-            "slope": "SmartScapeRaster_" + region + ":" + region + "_slopePer_30m",
-            "landuse": "SmartScapeRaster_" + region + ":" + region + "_WiscLand_30m",
-            "stream_dist": "SmartScapeRaster_" + region + ":" + region + "_distanceToWaterWays",
-            "land_class": "SmartScapeRaster_" + region + ":" + region + "_landClass_30m",
-            "farm_class": "SmartScapeRaster_" + region + ":" + region + "_farmClass_30m",
-            "om": "SmartScapeRaster_" + region + ":" + region + "_om_30m",
-            "drainClass": "SmartScapeRaster_" + region + ":" + region + "_drainClass_30m",
-            # "nResponse": "SmartScapeRaster_" + region + ":" + region + "_nResponse_30m",
-            "hydgrp": "SmartScapeRaster_" + region + ":" + region + "_hydgrp_30m",
-            "pDel": "SmartScapeRaster_" + region + ":" + region + "_pDelivFactor_30m",
-            "sand": "SmartScapeRaster_" + region + ":" + region + "_sand_30m",
+            "slope": "_slopePer_30m",
+            "landuse": "_WiscLand_30m",
+            "stream_dist": "_distanceToWaterWays",
+            "land_class": "_landClass_30m",
+            "farm_class": "_farmClass_30m",
+            "om": "_om_30m",
+            "drainClass": "_drainClass_30m",
+            "hydgrp": "_hydgrp_30m",
+            "pDel": "_pDelivFactor_30m",
+            "sand": "_sand_30m",
         }
         if region != "pineRiverMN":
-            self.layer_dic["nResponse"] = "SmartScapeRaster_" + region + ":" + region + "_nResponse_30m"
+            self.layer_dic["nResponse"] = "_nResponse_30m"
         self.extents = extents
         self.field_id = field_id
         geo_server_url = settings.GEOSERVER_URL
@@ -120,9 +124,22 @@ class RasterDataSmartScape:
         print(polygon)
         polygon.to_file(filename=os.path.join(self.dir_path, self.file_name + ".shp"), driver="ESRI Shapefile")
 
-    def check_raster_data(self, raster_dic):
+    def check_raster_data(self, raster_dic: Dict):
+        """Method to check the downloaded raster data
+
+        Parameters
+        ----------
+        raster_dic : dict
+            dictionary of raster data to check
+
+        Raises
+        ------
+        ValueError
+            if raster dimensions do not match
+        """
         raster_dic_key_list = [*raster_dic.keys()]
         raster_shape = raster_dic[raster_dic_key_list[0]].shape
+        logger.info(f"Length of rasters {len(raster_dic)}")
         for raster in raster_dic_key_list:
             if raster_shape != raster_dic[raster].shape:
                 print("raster shape to match", raster_shape)
@@ -141,21 +158,19 @@ class RasterDataSmartScape:
         """
         # layer_list = requests.get("http://localhost:8081/geoserver/rest/
         # layers.json")
-
+        cache_list = []
+        logger.info("Model input cache done")
         for layer in self.layer_dic:
-            print("downloading base layer ", layer)
-            url = self.geoserver_url + self.layer_dic[layer] + self.extents_string_x + self.extents_string_y
-            print(url)
+            logger.info(self.layer_dic[layer])
+            url = self.geoserver_url + "SmartScapeRaster_" + self.region + ":" + self.region + self.layer_dic[layer] + self.extents_string_x + self.extents_string_y
             raster_file_path = os.path.join(self.dir_path, layer + ".tif")
-            # print("done downloading")
-            print("raster_file_path", raster_file_path)
             self.createNewDownloadThread(url, raster_file_path)
+            cache_list.append(self.region + self.layer_dic[layer])
 
-            # r = requests.get(url)
-            # with open(raster_file_path, "wb") as f:
-            #     f.write(r.content)
-            print("done writing")
+        geoserver_cache_checker.check_cache(self.region, "modelInputs", cache_list)
         self.joinThreads()
+        logger.info(f"{self.region} modelInputs {self.layer_dic}")
+        logger.info("Input Layers Loaded")
 
     def createNewDownloadThread(self, link, filelocation):
         download_thread = threading.Thread(target=self.download, args=(link, filelocation))
