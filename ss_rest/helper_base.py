@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from ss_rest.raster_data_smartscape import RasterDataSmartScape
 from ss_rest.smart_scape import SmartScape
+from ss_rest.services import geoserver_cache_checker
 # from grazescape.db_connect import *
 import traceback
 from django.http import FileResponse
@@ -24,15 +25,17 @@ import math
 import numpy as np
 import os
 from django.conf import settings
+import logging
+import json
 
+logger = logging.getLogger(__name__)
 
 def download_base_rasters_helper(request, geo_folder):
-    print("starting to download base rasters")
+    logger.info("starting to download base rasters")
     request_json = js.loads(request.body)
     # geo_folder = request_json["folderId"]
     region = request_json['region']
     manure_options = get_phos_fert_options(request, True, region)
-    # print("manure options", manure_options)
     base_scen = request_json['baseTrans']
     geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files',
                               'raster_inputs', geo_folder)
@@ -132,7 +135,6 @@ def download_base_rasters_helper(request, geo_folder):
         return m1, m2, p1, p2
 
     # p manure is the same for all base
-    print("base scen", base_scen)
     manure_cont = float(base_scen["managementCont"]["phos_manure"])
     manure_corn = float(base_scen["managementCorn"]["phos_manure"])
     manure_dairy = float(base_scen["managementDairy"]["phos_manure"])
@@ -148,7 +150,6 @@ def download_base_rasters_helper(request, geo_folder):
     base_phos_fert_dairy = float(base_scen["managementDairy"]["phos_fertilizer"])
     base_phos_fert_past = float(base_scen["managementPast"]["phos_fertilizer"])
 
-    print("done getting phos values from scenario")
 
     man1_cont, man2_cont, phos1_cont, phos2_cont = get_m_p_options(manure_rounded_cont, base_phos_fert_cont,
                                                                    manure_cont)
@@ -159,7 +160,6 @@ def download_base_rasters_helper(request, geo_folder):
     man1_past, man2_past, phos1_past, phos2_past = get_m_p_options(manure_rounded_past, base_phos_fert_past,
                                                                    manure_past)
 
-    print("manure values for raster baseline")
     manure_p_cont = str(man1_cont) + "_" + str(phos1_cont)
     manure_p2_cont = str(man2_cont) + "_" + str(phos2_cont)
 
@@ -171,10 +171,6 @@ def download_base_rasters_helper(request, geo_folder):
 
     manure_p_past = str(man1_past) + "_" + str(phos1_past)
     manure_p2_past = str(man2_past) + "_" + str(phos2_past)
-
-
-    # print(manure_p)
-    # print(manure_p2)
 
     for name in base_names:
         for model in model_names_base:
@@ -230,13 +226,15 @@ def download_base_rasters_helper(request, geo_folder):
     soy = "soy_Yield_" + region
     base_layer_dic["corn_yield"] = "" + corn
     base_layer_dic["soy_yield"] = "" + soy
+
     base_layer_dic["landuse"] = "" + region + "_WiscLand_30m"
     base_layer_dic["hyd_letter"] = "" + region + "_hydgrp_30m"
+    cache_input_model = [region + "_WiscLand_30m", region + "_hydgrp_30m"]
     base_layer_dic["hayGrassland_Yield"] = "pasture_Yield_medium_" + region
 
     base_layer_dic["pastureWatershed_Yield"] = "pasture_Yield_" + base_scen["managementPast"][
         "grassYield"] + "_" + region
-    print(base_layer_dic)
+    
     image = gdal.Open(os.path.join(geo_folder, "landuse_aoi-clipped.tif"))
     band = image.GetRasterBand(1)
     geoTransform = image.GetGeoTransform()
@@ -255,21 +253,30 @@ def download_base_rasters_helper(request, geo_folder):
     geoserver_url = geo_server_url + "/geoserver/ows?service=WCS&version=2.0.1&" \
                                      "srsName=EPSG:3071&request=GetCoverage&CoverageId="
     workspace = "SmartScapeRaster_" + region + ":"
-    threads_list = []
-    print("geofolder file path", geo_folder)
     folder_base = os.path.join(geo_folder, "base")
     if not os.path.exists(folder_base):
         os.makedirs(folder_base)
     else:
         shutil.rmtree(folder_base)
         os.makedirs(folder_base)
+    cache_list = []
 
+    thread_list = []
+    
     for layer in base_layer_dic:
-        # print("downloading layer base", base_layer_dic[layer])
+        
         url = geoserver_url + workspace + base_layer_dic[layer] + extents_string_x + extents_string_y
         raster_file_path = os.path.join(geo_folder, "base", layer + ".tif")
         download_thread = threading.Thread(target=download, args=(url, raster_file_path))
-        download_thread.start()
+        thread_list.append(download_thread)
+        cache_list.append(base_layer_dic[layer])
+    logger.info("region %s modelOutputs base layer rasters: %s", region, json.dumps(cache_list, indent=2))
+    logger.info("region %s modelInputs base layer rasters: %s", region, json.dumps(cache_input_model, indent=2))
+    geoserver_cache_checker.check_cache(region, "modelOutputs", cache_list)
+    geoserver_cache_checker.check_cache(region, "modelInputs", cache_input_model)
+
+    for thr in thread_list:
+        thr.start()
 
 
 def download(link, filelocation):
@@ -309,31 +316,8 @@ def get_phos_fert_options(request, base_calc, region):
     base = request_json['baseTrans']
     # file path of our input data
     geo_folder = os.path.join(settings.SCRATCH_DIR, 'smartscape', 'data_files', 'raster_inputs', folder_id)
+    check_nrec_files(region, geo_folder)
 
-    # make sure files are loaded
-    def check_file_path(geo_folder_func):
-        # print("checking files!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        # print(geo_folder_func)
-        if not os.path.exists(geo_folder_func):
-            return False
-        dir_list = os.listdir(geo_folder_func)
-        # print(dir_list)
-        if region != "pineRiverMN":
-            if "om.tif" in dir_list and "drainClass.tif" in dir_list and "nResponse.tif" in dir_list:
-                return True
-            else:
-                return False
-        else:
-            if "om.tif" in dir_list and "drainClass.tif" in dir_list:
-                return True
-            else:
-                return False
-
-    files_loaded = check_file_path(geo_folder)
-    while not files_loaded:
-        time.sleep(.5)
-        files_loaded = check_file_path(geo_folder)
-        print("file not loaded")
 
     model = SmartScape(request_json, folder_id, folder_id)
     model.geo_folder = geo_folder
@@ -522,7 +506,6 @@ def get_phos_fert_options(request, base_calc, region):
     return_data = {}
 
     if not base_calc:
-        print("calculating phos for trans")
         trans = request_json['trans']
         for tran1 in trans:
             tran = trans[tran1]
@@ -530,33 +513,72 @@ def get_phos_fert_options(request, base_calc, region):
     else:
         return_data = calc_phos_calc(arr, base, "base", base)
 
-    print(return_data)
     return return_data
 
 
 def check_base_files_loaded(geo_folder, region):
-    # make sure files are loaded
-    print("geo_folder", geo_folder)
-    print("region", region)
-
+ 
     def check_file_path(geo_folder_func):
         folder_count = 0
-        print(geo_folder_func)
         if not os.path.exists(geo_folder_func):
             return False
         dir_list = os.listdir(geo_folder_func)
         if len(dir_list) < 30:
             return False
         for file in dir_list:
-            print(file)
             folder_count = folder_count + 1
             if file.endswith(".part"):
                 return False
         return True
 
     files_loaded = check_file_path(geo_folder)
+    max_time = 10
+    c_time = 0
     while not files_loaded:
         time.sleep(.5)
         files_loaded = check_file_path(geo_folder)
-        print("file not loaded")
-    print("all base files are loaded")
+        c_time += 1
+        if c_time > max_time:
+            logger.error("Base files did not load")
+            raise TimeoutError("Base files did not load")
+    logger.info("all base files are loaded")
+
+
+def check_nrec_files(region: str, geo_folder: str):
+    """check that files specifically for ploss are loaded
+
+    Parameters
+    ----------
+    region : str
+        working region of user
+    geo_folder : str
+        file path to where base rasters are being stored
+
+    Raises
+    ------
+    TimeoutError
+        timeout do to files not loading
+    """
+    max_time = 10
+    c_time = 0
+    files_loaded = False
+    while not files_loaded:
+        if not os.path.exists(geo_folder):
+            files_loaded = False
+        dir_list = os.listdir(geo_folder)
+        if region != "pineRiverMN":
+            if "om.tif" in dir_list and "drainClass.tif" in dir_list and "nResponse.tif" in dir_list:
+                files_loaded = True
+            else:
+                files_loaded = True
+        else:
+            if "om.tif" in dir_list and "drainClass.tif" in dir_list:
+                files_loaded = True
+            else:
+                files_loaded = True
+        c_time += 1
+        if c_time > max_time:
+            logger.error("Files for NREC did not load")
+            raise TimeoutError("Files for NREC did not load")
+        time.sleep(.5)
+    logger.info("NREC files loaded")
