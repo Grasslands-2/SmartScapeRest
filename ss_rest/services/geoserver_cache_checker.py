@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 import requests
 from typing import List
 import logging
+ 
 logger = logging.getLogger(__name__)
 
 def check_cache(region: str, file_type: str, file_list: List[str]):
@@ -22,7 +23,7 @@ def check_cache(region: str, file_type: str, file_list: List[str]):
     region : str
         region of the request files
     file_type : str
-        The input type, either ``"modelInputs"`` or ``"modelOutputs"``.
+        The input type,  ``"modelInputs"`` , ``"modelOutputs"``, ``"HUC"``.
     file_list : list of str
         _list file names to check against the cache
     Examples
@@ -52,7 +53,13 @@ def check_cache(region: str, file_type: str, file_list: List[str]):
         if file_type == "modelOutputs":
             if region == "eastCentralWI" or region == "northeastWI" or region == "southEastWI":
                 geo_type = "tiff"
-        get_package.append(f"{region}/{file_type}/{file}.{geo_type}")
+            get_package.append(f"{region}/{file_type}/{file}.{geo_type}")
+        elif file_type == "modelInputs":
+            get_package.append(f"{region}/{file_type}/{file}.{geo_type}")
+        elif file_type == "HUC":
+            get_package.append(f"{region}/{file_type}/{file}")
+        else:
+            raise ValueError("file type not found") 
     # http://localhost:5000/fetch?keys=cloverBelt/modelInputs/cloverBeltWI_DEM_30m.tif&keys=cloverBelt/modelInputs/cloverBeltWI_awc_30m.tif
     # Create query parameters
     query = urlencode([("keys", path) for path in get_package])
@@ -65,7 +72,31 @@ def check_cache(region: str, file_type: str, file_list: List[str]):
     # logging.info(f"{response.text['status']}")
 
 if __name__ == "__main__":
-    region = 'cloverBelt'
-    file_type = "modelInputs"
-    file_list = ["cloverBeltWI_DEM_30m", "cloverBeltWI_awc_30m"]
+    # region = 'cloverBelt'
+    # file_type = "modelInputs"
+    # file_list = ["cloverBeltWI_DEM_30m", "cloverBeltWI_awc_30m"]
+    region = 'southWestWI'
+    file_type = "HUC"
+    file_list = [
+    
+        "southWestWI_Huc10.cpg",
+
+        "southWestWI_Huc10.dbf",
+
+        "southWestWI_Huc10.prj",
+
+        "southWestWI_Huc10.shp",
+
+        "southWestWI_Huc10.shx",
+
+        "southWestWI_Huc12.cpg",
+
+        "southWestWI_Huc12.dbf",
+
+        "southWestWI_Huc12.prj",
+
+        "southWestWI_Huc12.shp",
+
+        "southWestWI_Huc12.shx",
+    ]
     check_cache(region, file_type, file_list)
