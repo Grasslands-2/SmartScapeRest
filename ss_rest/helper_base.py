@@ -532,7 +532,7 @@ def check_base_files_loaded(geo_folder, region):
         return True
 
     files_loaded = check_file_path(geo_folder)
-    max_time = 10
+    max_time = 30
     c_time = 0
     while not files_loaded:
         time.sleep(.5)
