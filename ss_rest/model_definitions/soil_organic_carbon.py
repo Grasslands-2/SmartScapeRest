@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 def get_soc_lookup_data(transformation):
     """
-    Placeholder function for calculating soil organic carbon (SOC) metrics.
 
     This function is intended to be implemented with the logic required to
     compute SOC based on relevant input data and parameters.
@@ -22,7 +21,7 @@ def get_soc_lookup_data(transformation):
     Examples
     --------
 
-    >>> get_soc_lookup_data()
+    >>> get_soc_lookup_data(transformation)
     """
 
     try:
