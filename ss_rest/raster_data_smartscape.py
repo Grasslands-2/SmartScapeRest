@@ -70,6 +70,7 @@ class RasterDataSmartScape:
             "hydgrp": "_hydgrp_30m",
             "pDel": "_pDelivFactor_30m",
             "sand": "_sand_30m",
+            "crp": "_CRP_Grass04",
         }
         if region != "pineRiverMN":
             self.layer_dic["nResponse"] = "_nResponse_30m"
@@ -121,7 +122,7 @@ class RasterDataSmartScape:
         invalid_polygons = polygon[~polygon.geometry.is_valid]
         fixed_polygons = invalid_polygons.geometry.buffer(0)
         polygon.loc[invalid_polygons.index, 'geometry'] = fixed_polygons
-        print(polygon)
+        # print(polygon)
         polygon.to_file(filename=os.path.join(self.dir_path, self.file_name + ".shp"), driver="ESRI Shapefile")
 
     def check_raster_data(self, raster_dic: Dict):
@@ -217,7 +218,10 @@ class RasterDataSmartScape:
                     outdata.FlushCache()
                     outdata = None
                     image = gdal.Open(os.path.join(self.dir_path, "om_filled.tif"))
-
+                if data_name =="crp":
+                    no_data = 3
+                else:
+                    no_data = self.no_data
                 # band = image.GetRasterBand(1)
                 # arr1 = np.asarray(band.ReadAsArray())
 
@@ -226,11 +230,11 @@ class RasterDataSmartScape:
                 # print("clipping raster ", data_name)
                 ds_clip = gdal.Warp(os.path.join(self.dir_path, data_name + "-clipped.tif"), image,
                                     cutlineDSName=os.path.join(self.dir_path, self.file_name + ".shp"),
-                                    cropToCutline=True, dstNodata=self.no_data, outputType=gc.GDT_Float32)
+                                    cropToCutline=True, dstNodata=no_data, outputType=gc.GDT_Float32)
                 if is_aoi:
                     ds_clip = gdal.Warp(os.path.join(self.dir_path, data_name + "_aoi-clipped.tif"), image,
                                         cutlineDSName=os.path.join(self.dir_path, self.file_name + ".shp"),
-                                        cropToCutline=True, dstNodata=self.no_data, outputType=gc.GDT_Float32)
+                                        cropToCutline=True, dstNodata=no_data, outputType=gc.GDT_Float32)
         print("done clipping")
 
     def get_clipped_rasters(self):

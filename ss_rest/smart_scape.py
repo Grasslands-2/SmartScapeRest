@@ -115,6 +115,7 @@ class SmartScape:
         landuse_par = self.request_json["selectionCrit"]["selection"]["landCover"]
         land_class = self.request_json["selectionCrit"]["selection"]["landClass"]
         farm_class = self.request_json["selectionCrit"]["selection"]["farmClass"]
+        crp = self.request_json["selectionCrit"]["selection"]["crp"]
 
         has_slope = False
         has_land = False
@@ -183,6 +184,14 @@ class SmartScape:
             # combine base case with slope
             datanm = np.where(np.logical_and(datanm == -99, datanm_stream == -99), -99, self.no_data)
         #     has_stream = True
+        datanm_crp= self.raster_inputs["crp"]
+        if crp == True:
+            logger.info("CRP is selected")
+            # no data value for crp is 3 so set that to no data value for all rasters and then set selected value to -99
+            datanm_crp = np.where(datanm_crp ==3,self.no_data, datanm_crp)
+            datanm_crp = np.where(
+                np.logical_and(1 == datanm_crp, datanm_crp != self.no_data), -99, datanm_crp)
+
         datanm_landclass = self.raster_inputs["land_class"]
         if land_class["land1"]:
             datanm_landclass = np.where(
@@ -284,6 +293,8 @@ class SmartScape:
             datanm = np.where(np.logical_and(datanm == -99, datanm_landclass == -99), -99, self.no_data)
         if farm_class_selected:
             datanm = np.where(np.logical_and(datanm == -99, datanm_farmclass == -99), -99, self.no_data)
+        if crp == True:
+             datanm = np.where(np.logical_and(datanm == -99, datanm_crp == -99), -99, self.no_data)
         datanm = np.where(np.logical_and(datanm == -99, datanm_landuse == -99), -99, self.no_data)
 
         selected_cells = np.count_nonzero(datanm != self.no_data)
@@ -360,6 +371,7 @@ class SmartScape:
         start = time.time()
         mm_to_ac = 0.000247105
         ha_to_ac = 0.404686
+        
         bird_window_size = 13
         ploss_water_base = None
         ploss_water_model = None
@@ -395,8 +407,7 @@ class SmartScape:
         base_dir = os.path.join(self.geo_folder, "base")
         field_yield = self.calculate_yield_field(base_dir)
         # download om and Nresponse
-        # southWestWI_drainClass_30m
-        # southWestWI_nResponse_30m
+
         file_list = []
         for tran1 in trans:
             tran = trans[tran1]
