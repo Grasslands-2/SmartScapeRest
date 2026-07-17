@@ -184,13 +184,14 @@ class SmartScape:
             # combine base case with slope
             datanm = np.where(np.logical_and(datanm == -99, datanm_stream == -99), -99, self.no_data)
         #     has_stream = True
-        datanm_crp= self.raster_inputs["crp"]
-        if crp == True:
-            logger.info("CRP is selected")
-            # no data value for crp is 3 so set that to no data value for all rasters and then set selected value to -99
-            datanm_crp = np.where(datanm_crp ==3,self.no_data, datanm_crp)
-            datanm_crp = np.where(
-                np.logical_and(1 == datanm_crp, datanm_crp != self.no_data), -99, datanm_crp)
+        if "crp" in self.raster_inputs:
+            datanm_crp= self.raster_inputs["crp"]
+            if crp == True:
+                logger.info("CRP is selected")
+                # no data value for crp is 3 so set that to no data value for all rasters and then set selected value to -99
+                datanm_crp = np.where(datanm_crp ==3,self.no_data, datanm_crp)
+                datanm_crp = np.where(
+                    np.logical_and(1 == datanm_crp, datanm_crp != self.no_data), -99, datanm_crp)
 
         datanm_landclass = self.raster_inputs["land_class"]
         if land_class["land1"]:
