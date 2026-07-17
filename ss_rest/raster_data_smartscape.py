@@ -70,10 +70,13 @@ class RasterDataSmartScape:
             "hydgrp": "_hydgrp_30m",
             "pDel": "_pDelivFactor_30m",
             "sand": "_sand_30m",
-            "crp": "_CRP_Grass04",
         }
+        # pine river does not have a nResponse layer so we will not download it for that region
         if region != "pineRiverMN":
             self.layer_dic["nResponse"] = "_nResponse_30m"
+        # only south west and uplands have crp layer so only download for those regions
+        if region == "southWestWI" or region == "uplandsWI":
+            self.layer_dic["crp"] = "_CRP_Grass04"
         self.extents = extents
         self.field_id = field_id
         geo_server_url = settings.GEOSERVER_URL
