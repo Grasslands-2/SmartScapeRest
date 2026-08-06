@@ -35,12 +35,12 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'api.smartscape.grasslandag.org','ss-loadbalancer-private-1065978722.us-east-2.elb.amazonaws.com', '144.92.32.223'] 
 # allow health checks from target group
 ALLOWED_HOSTS.append(gethostbyname(gethostname()))
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:8000',
-#     'http://3.137.58.213',
-# ]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',
+    'http://3.137.58.213',
+]
 
 GEOSERVER_URL = "http://144.92.32.223:8080"
 # GEOSERVER_URL = "http://internal-grassland-geoserver-loadbalancer-855160393.us-east-2.elb.amazonaws.com"
