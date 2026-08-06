@@ -468,10 +468,32 @@ def get_phos_fert_options(request, base_calc, region):
         p_manure_dairy = np.sum(output_dairy) / cell_dairy
         p_manure_past = np.sum(output_past) / cell_pasture
 
+        if cell_corn == 0:
+            # p_manure_levels_cont = 0 
+            p_manure_cont = 0 
+        if cell_corn_grain == 0:
+            # p_manure_levels_corn = 0 
+            p_manure_corn  = 0
+        if cell_dairy == 0:
+            # p_manure_levels_dairy = 0
+            p_manure_dairy = 0
+        if cell_pasture == 0:
+            # p_manure_levels_past = 0
+            p_manure_past  = 0
+
+
         p_manure_levels_cont = model.calc_manure_level(p_manure_cont)
         p_manure_levels_corn = model.calc_manure_level(p_manure_corn)
         p_manure_levels_dairy = model.calc_manure_level(p_manure_dairy)
         p_manure_levels_past = model.calc_manure_level(p_manure_past)
+
+
+        logger.info(f"p_choices {phos_choices}")
+        logger.info(f"p_choices cont {p_manure_levels_cont}")
+        logger.info(f"p_choices corn {p_manure_levels_corn}")
+        logger.info(f"p_choices dairy {p_manure_levels_dairy}")
+        logger.info(f"p_choices past {p_manure_levels_past}")
+
 
         if id != "base":
             return_data[id] = {"p_manure": "{:,.0f}".format(p_manure_trans),
@@ -500,7 +522,7 @@ def get_phos_fert_options(request, base_calc, region):
                     "p_manure_cat": p_manure_levels_past
                 },
             }
-
+        logger.info(f"return data {return_data}")
         return return_data
 
     return_data = {}
